@@ -53,7 +53,14 @@ $ NSL_ID="<my_id>" NSL_SECRET="my_secret" jupyter notebook
 
 Open a new notebook.
 
-Copy and paste this code into to download and view a geotiff.
+Copy and paste the code example into the notebook to download and view a geotiff.
+
+> This example is modified from https://github.com/nearspacelabs/stac-client-python#first-code-example
+
+<br>
+<br>
+
+<details><summary>Query and view image code</summary>
 
 ```python
 import tempfile, os
@@ -101,12 +108,37 @@ stac_item = client.search_one(stac_request)
 print("STAC id {}".format(stac_item.id))
 asset = utils.get_asset(stac_item, asset_type=enum.AssetType.GEOTIFF)
 
-d = os.getcwd()
-
 # with save_dir as d:
+d = os.getcwd()
 filename = utils.download_asset(asset=asset, save_directory=d)
-# display(Image(filename=filename))
 fp = filename
 img = rasterio.open(fp)
 show(img)
 ```
+</details>
+<br>
+
+![Austin,TX](./img/austin.png)
+
+## Concepts: Protobufs, gRPC, and Spatio Temporal Asset Catalogs (STAC)
+
+The `nsl.stac` library connects to NearSpace Labs' Spatio Temporal Asset Catalog (STAC) which holds metadata about imagery. It uses the gPRC, a modern framwork for requesting services from the STAC server. The requests are formatted as a protocol buffer which is a binary structured format for serializing data.
+
+Details about each are listed below:
+
+**Definition of [STAC](https://stacspec.org/)**:
+> The SpatioTemporal Asset Catalog (STAC) specification provides a common language to describe a range of geospatial information, so it can more easily be indexed and discovered.  A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain space and time.
+
+**Definition of [gRPC](https://grpc.io)**:
+> gRPC is a modern open source high performance RPC framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking and authentication. It is also applicable in last mile of distributed computing to connect devices, mobile applications and browsers to backend services.
+
+**Definition of [Protocol Buffers (protobuf)](https://developers.google.com/protocol-buffers/)**:
+> Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
+
+To summarize:
+- You can think of Protobuf as a strict data format like xml or JSON + linting, except Protobuf is a compact binary message with strongly typed fields
+- gRPC is similar to REST + OpenAPI, except gRPC is an [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) framework that supports bi-directional streaming
+- STAC is a specification that helps remove repeated efforts for searching geospatial datasets (like WFS for specific data types)
+
+## Querying the STAC server
+
