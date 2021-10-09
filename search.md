@@ -143,8 +143,6 @@ You may have noticed that the [Asset](https://geo-grpc.github.io/api/#epl.protob
 
 The STAC specification has a bounding box `bbox` specification for STAC items. We can use a bouding box to make a STAC request. We define an [EnvelopeData](https://geo-grpc.github.io/api/#epl.protobuf.v1.EnvelopeData) protobuf object. The advantage of doing this is that we specify other projections besides WGS84, which you cannot do with a JSON STAC request.
 
-<details><summary>Query by EnvelopeData</summary>
-
 ```python
 from nsl.stac import StacRequest, EnvelopeData, ProjectionData
 from nsl.stac.client import NSLClient
@@ -167,7 +165,6 @@ stac_request = StacRequest(bbox=envelope_data)
 for stac_item in client.search(stac_request):
     print("STAC item id: {}".format(stac_item.id))
 ```
-</details>
 
 The query returns the STAC ids of 10 items.
 
@@ -189,8 +186,6 @@ The query returns the STAC ids of 10 items.
 #### Query with geojson
 
 We can search by geometry instead of bounding box. We'll use geojson to define our area of interest as a [GeometryData](https://geo-grpc.github.io/api/#epl.protobuf.v1.GeometryData) protobuf. GeometryData can be defined using geojson, wkt, wkb, or as an ESRI shape:
-
-<details><summary>Query by Geometry</summary>
 
 ```python
 import json
@@ -219,8 +214,6 @@ for stac_item in client.search(stac_request):
     print("STAC item id: {}".format(stac_item.id))
     geojson_ids.append(stac_item.id)
 ```
-</details>
-
 
 The query returns two items:
 
@@ -232,8 +225,6 @@ The query returns two items:
 #### Query with [Well Known Text (WKT)](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
 
 Using the same geometry as the example above, but with WKT geometry instead of a geojson:
-
-<details><summary>Expand Python Code Sample</summary>
 
 ```python
 # Same geometry as above, but a wkt geometry instead of a geojson
@@ -248,7 +239,6 @@ for stac_item in client.search(stac_request):
     print("STAC item id: {0} from wkt filter intersects result from geojson filter: {1}"
           .format(stac_item.id, stac_item.id in geojson_ids))
 ```
-</details>
 
 The query returns two items:
 
