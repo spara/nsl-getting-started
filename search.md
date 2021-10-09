@@ -316,16 +316,11 @@ The request returns STAC items between the dates of Aug 1 2019 and Aug 10 2019. 
     STAC item date, 2019-08-06T20:42:51+00:00, is before 2019-08-10T00:00:00+00:00: True
 ```
 
-#### Select Data for One Day
+#### Select data for one day
 
-Now we'll search for everything on a specific day using a python `datetime.date` for the `value` and `rel_type` set to  use equals (`FilterRelationship.EQ`). Python's `datetime.datetime` is a specific value and if you use it combined with `EQ` the query would insist that the time relationship match down to the second. But since `datetime.date` is only specific down to the day, the filter is created for the entire day. This will check for everything from the start until the end of the 8th of August, specifically in the Austin, Texas timezone (UTC -6).
+We can search on a specific day using Python's `datetime.date` for the `value` and `rel_type` set to  use equals (`FilterRelationship.EQ`). 
 
-
-
-
-
-<details><summary>Expand Python Code Sample</summary>
-
+Python's `datetime.datetime` is a specific value and when combined with `EQ`, the query requires that the time relationship match down to the second. However, `datetime.date` is specific down to the day, the filter is created for the entire day. This checks request everything from the start until the end of the 8th of August, in the Austin, Texas' timezone (UTC -6).
 
 ```python
 from datetime import datetime, timezone, timedelta, date
@@ -355,14 +350,7 @@ for stac_item in client.search(stac_request):
         stac_item.observed.seconds > time_filter.start.seconds))
 ```
 
-
-</details>
-
-
-
-
-<details><summary>Expand Python Print-out</summary>
-
+The query returns results between `2019-08-06T00:00:00-06:00` and `2019-08-06T23:59:59-06:00`.
 
 ```text
     STAC item date, 2019-08-06T20:42:53+00:00, is before 2019-08-06T23:59:59-06:00: True
@@ -372,11 +360,8 @@ for stac_item in client.search(stac_request):
 ```
 
 
-</details>
 
 
-
-The above printout demonstrates that the results are between the time ranges of `2019-08-06T00:00:00-06:00` and `2019-08-06T23:59:59-06:00`.
 
 ## Downloading
 To download an asset use the `bucket` + `object_path` or the `href` fields from the asset, and download the data using the library of your choice. There is also a download utility in the `nsl.stac.utils` module. Downloading from Google Cloud Storage buckets requires having defined your `GOOGLE_APPLICATION_CREDENTIALS` [environment variable](https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable). Downloading from AWS/S3 requires having your configuration file or environment variables defined as you would for [boto3](https://boto3.amazonaws.com/v1/documentation/api/1.9.42/guide/quickstart.html#configuration). 
