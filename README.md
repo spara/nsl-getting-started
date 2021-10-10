@@ -140,4 +140,4 @@ To summarize:
 - gRPC is similar to REST + OpenAPI, except gRPC is an [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) framework that supports bi-directional streaming
 - STAC is a  searchable catalog  of metadata for geospatial datasets or assets.
 
-[**Search >**](./search.md)
+(Next) [**Search >>>**](./search.md)
