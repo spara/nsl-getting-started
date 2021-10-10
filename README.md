@@ -1,5 +1,8 @@
 # Getting Started with NearSpace Labs API and Anaconda
 
+This is a brief introduction to searching and downloading imagery assets from NearSpace Labs. For more in-depth documentation go to NearSpace Labs [`nsl.stac` repository](https://github.com/nearspacelabs/stac-client-python)
+on Github.
+
 The [`nsl.stac`](https://pypi.org/project/nsl.stac/) Python package lets you find aerial imagery by area of interest, data, and other attributes. It also downloads Near Space Labs Geotiffs and thumbnails. The client connects to Near Space Labs [STAC](https://stacspec.org/) service for imagery metadata queries and imagery server to retrieve imagery.
 
 ## What you need for this tutorial
@@ -140,4 +143,4 @@ To summarize:
 - gRPC is similar to REST + OpenAPI, except gRPC is an [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) framework that supports bi-directional streaming
 - STAC is a  searchable catalog  of metadata for geospatial datasets or assets.
 
-(Next) [**Search >>>**](./search.md)
+[Next](./search.md) **Search >>>**
