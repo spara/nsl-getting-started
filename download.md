@@ -1,15 +1,32 @@
-## Downloading
-To download an asset use the `bucket` + `object_path` or the `href` fields from the asset, and download the data using the library of your choice. There is also a download utility in the `nsl.stac.utils` module. Downloading from Google Cloud Storage buckets requires having defined your `GOOGLE_APPLICATION_CREDENTIALS` [environment variable](https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable). Downloading from AWS/S3 requires having your configuration file or environment variables defined as you would for [boto3](https://boto3.amazonaws.com/v1/documentation/api/1.9.42/guide/quickstart.html#configuration). 
+# Downloading
 
-### Thumbnails
-To downlad thumbnail assets follow the pattern in the below example:
+To download an asset use the `bucket` + `object_path` or the `href` fields from the asset, and download the data using the library of your choice. 
 
+```test
+   assets {
+      key: "GEOTIFF_RGB"
+      value {
+        href: "https://api.nearspacelabs.net/download/20190822T162258Z_TRAVIS_COUNTY/Published/REGION_0/20190822T183518Z_746_POM1_ST2_P.tif"
+        type: "image/vnd.stac.geotiff"
+        eo_bands: RGB
+        asset_type: GEOTIFF
+        cloud_platform: GCP
+        bucket_manager: "Near Space Labs"
+        bucket_region: "us-central1"
+        bucket: "swiftera-processed-data"
+        object_path: "20190822T162258Z_TRAVIS_COUNTY/Published/REGION_0/20190822T183518Z_746_POM1_ST2_P.tif"
+      }
+    }
+```
 
+``` bash
+$ wget "https://api.nearspacelabs.net/download/20190822T162258Z_TRAVIS_COUNTY/Published/REGION_0/20190822T183518Z_746_POM1_ST2_P.tif"
+```
 
+There is also a download utility in the `nsl.stac.utils` module. Downloading from Google Cloud Storage buckets requires having defined your `GOOGLE_APPLICATION_CREDENTIALS` [environment variable](https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable). Downloading from AWS/S3 requires having your configuration file or environment variables defined as you would for [boto3](https://boto3.amazonaws.com/v1/documentation/api/1.9.42/guide/quickstart.html#configuration). 
 
-
-<details><summary>Expand Python Code Sample</summary>
-
+## Thumbnails
+To downlad thumbnail assets follow the example below:
 
 ```python
 import tempfile
@@ -38,38 +55,15 @@ for stac_item in client.search(stac_request):
         display(Image(filename=file_obj.name))
 ```
 
-
-</details>
-
-
-
-
+![png](./img/README_18_0.png)
     
-![png](README_files/README_18_0.png)
+![png](./img/README_18_1.png)
     
-
-
-
+![png](./img/README_18_2.png)
     
-![png](README_files/README_18_1.png)
-    
+## Geotiffs
 
-
-
-    
-![png](README_files/README_18_2.png)
-    
-
-
-### Geotiffs
-To download the full geotiff asset follow the pattern in the below example:
-
-
-
-
-
-<details><summary>Expand Python Code Sample</summary>
-
+To download geotiff assets follow the example below:
 
 ```python
 import os
@@ -100,24 +94,11 @@ with tempfile.TemporaryDirectory() as d:
 ```
 
 
-</details>
-
-
-
-
-<details><summary>Expand Python Print-out</summary>
-
-
 ```text
     20190826T190001Z_761_POM1_ST2_P.tif has 131373291 bytes
 ```
 
-
-</details>
-
-
-
-### Handling Deadlines
+## Handling ddeadlines
 The `search` method is a gRPC streaming request. It sends a single request to the server and then maintains an open connection to the server, which then pushes results to the client. This means that if you have a long running sub-routine that executes between each iterated result from `search` you may exceed the 15 second timeout. If you have a stac request so large that the results create a memory problem or the blocking behavior limits your application performance, then you will want to use `offset` and `limit` as described in [AdvancedExamples.md](./AdvancedExamples.md#limits-and-offsets).
 
 Otherwise, an easy way to iterate through results without timing-out on long running sub-routines is to capture the `search` results in a `list`.
