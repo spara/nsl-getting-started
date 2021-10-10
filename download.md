@@ -93,24 +93,17 @@ with tempfile.TemporaryDirectory() as d:
     print("{0} has {1} bytes".format(os.path.basename(file_path), os.path.getsize(file_path)))
 ```
 
-
 ```text
     20190826T190001Z_761_POM1_ST2_P.tif has 131373291 bytes
 ```
 
-## Handling ddeadlines
-The `search` method is a gRPC streaming request. It sends a single request to the server and then maintains an open connection to the server, which then pushes results to the client. This means that if you have a long running sub-routine that executes between each iterated result from `search` you may exceed the 15 second timeout. If you have a stac request so large that the results create a memory problem or the blocking behavior limits your application performance, then you will want to use `offset` and `limit` as described in [AdvancedExamples.md](./AdvancedExamples.md#limits-and-offsets).
+## Handling deadlines
+
+The `search` method is a gRPC streaming request. It sends a single request to the server and then opens and maintains a connection to the server, which then pushes results to the client. If you have a long running sub-routine that executes between each iterated result from `search` you may exceed the 15 second timeout. If the stac request results create in a memory problem or the blocking behavior limits your application's performance, use `offset` and `limit` as described in [AdvancedExamples.md](https://github.com/nearspacelabs/stac-client-python/blob/master/AdvancedExamples.md).
 
 Otherwise, an easy way to iterate through results without timing-out on long running sub-routines is to capture the `search` results in a `list`.
 
 For example:
-
-
-
-
-
-<details><summary>Expand Python Code Sample</summary>
-
 
 ```python
 import os
@@ -144,77 +137,9 @@ with tempfile.TemporaryDirectory() as d:
         print("saved {}".format(os.path.basename(filename)))
 ```
 
-
-</details>
-
-
-
-
-<details><summary>Expand Python Print-out</summary>
-
-
 ```text
     STAC item id: 20190826T190001Z_761_POM1_ST2_P
     saved 20190826T190001Z_761_POM1_ST2_P.tif
     STAC item id: 20190826T185933Z_747_POM1_ST2_P
     saved 20190826T185933Z_747_POM1_ST2_P.tif
 ```
-
-
-</details>
-
-
-
-## Differences between gRPC+Protobuf STAC and OpenAPI+JSON STAC
-If you are already familiar with STAC, you'll need to know that gRPC + Protobuf STAC is slightly different from the JSON definitions. 
-
-JSON is naturally a flexible format and with linters you can force it to adhere to rules. Protobuf is a strict data format and that required a few differences between the JSON STAC specification and the protobuf specification:
-
-### JSON STAC Compared with Protobuf STAC
-
-#### STAC Item Comparison
-For Comparison, here is the [JSON STAC item field summary](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#item-fields) and the [Protobuf STAC item field summary](https://geo-grpc.github.io/api/#epl.protobuf.v1.StacItem). Below is a table comparing the two:
-
-
-| Field Name | STAC Protobuf Type                                                                                                       | STAC JSON Type                                                             |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| id         | [string](https://geo-grpc.github.io/api/#string)                                                                         | string                                                                     |
-| type       | NA                                                                                                                       | string                                                                     |
-| geometry   | [GeometryData](https://geo-grpc.github.io/api/#epl.protobuf.v1.GeometryData)                                             | [GeoJSON Geometry Object](https://tools.ietf.org/html/rfc7946#section-3.1) |
-| bbox       | [EnvelopeData](https://geo-grpc.github.io/api/#epl.protobuf.v1.EnvelopeData)                                             | [number]                                                                   |
-| properties | [google.protobuf.Any](https://developers.google.com/protocol-buffers/docs/proto3#any)                                    | Properties Object                                                          |
-| links      | NA                                                                                                                       | [Link Object]                                                              |
-| assets     | [StacItem.AssetsEntry](https://geo-grpc.github.io/api/#epl.protobuf.v1.StacItem.AssetsEntry)                             | Map                                                                        |
-| collection | [string](https://geo-grpc.github.io/api/#string)                                                                         | string                                                                     |
-| title      | [string](https://geo-grpc.github.io/api/#string)                                                                         | Inside Properties                                                          |
-| datetime   | [google.protobuf.Timestamp](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto) | Inside Properties                                                          |
-| observed   | [google.protobuf.Timestamp](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto) | Inside Properties                                                          |
-| processed  | [google.protobuf.Timestamp](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto) | Inside Properties                                                          |
-| updated    | [google.protobuf.Timestamp](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto) | Inside Properties                                                          |
-| duration   | [google.protobuf.Duration](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto)   | Inside Properties                                                          |
-| eo         | [Eo](https://geo-grpc.github.io/api/#epl.protobuf.v1.Eo)                                                                 | Inside Properties                                                          |
-| sar        | [Sar](https://geo-grpc.github.io/api/#epl.protobuf.v1.Sar)                                                               | Inside Properties                                                          |
-| landsat    | [Landsat](https://geo-grpc.github.io/api/#epl.protobuf.v1.Landsat)                                                       | Inside Properties                                                          |
-
-
-
-#### Eo Comparison
-For Comparison, here is the [JSON STAC Electro Optical field summary](https://github.com/radiantearth/stac-spec/tree/master/extensions/eo#item-fields) and the [Protobuf STAC Electro Optical field summary](https://geo-grpc.github.io/api/#epl.protobuf.v1.Eo). Below is a table comparing the two:
-
-| JSON Field Name | JSON Data Type                                                                                 | Protobuf Field Name | Protobuf Data Type                                                                                                                |
-| --------------- | ---------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| eo:bands        | [Band Object](https://github.com/radiantearth/stac-spec/tree/master/extensions/eo#band-object) | bands               | [Eo.Band](https://geo-grpc.github.io/api/#epl.protobuf.v1.Eo.Band)                                                                |
-| eo:cloud_cover  | number                                                                                         | cloud_cover         | [google.protobuf.wrappers.FloatValue](https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/wrappers.proto) |
-
-
-
-### Updating the samples in this README
-Use this README.ipynb notebook to update the README.md. Do not directly edit the README.md. It will be overwritten by output from `ipynb2md.py`. `ipynb2md.py` can be downloaded from this [gist](https://gist.github.com/davidraleigh/a24f637ccb018610a87aaacb12281452).
-
-```bash
-curl -o ipynb2md.py https://gist.githubusercontent.com/davidraleigh/a24f637ccb018610a87aaacb12281452/raw/009a50f29b920c7b00dcd4142c51bf6bf3c0cb3b/ipynb2md.py
-```
-
-Make your edits to the README.ipynb, in *Kernel->Restart & Run All* to confirm your changes worked, Save and Checkpoint, then run the python script `python ipynb2md.py -i README.ipynb`.
-
-
