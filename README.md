@@ -135,12 +135,4 @@ Details about each are listed below:
 **Definition of [gRPC](https://grpc.io)**:
 > gRPC is a modern open source high performance RPC framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking and authentication. It is also applicable in last mile of distributed computing to connect devices, mobile applications and browsers to backend services.
 
-**Definition of [Protocol Buffers (protobuf)](https://developers.google.com/protocol-buffers/)**:
-> Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
-
-To summarize:
-- You can think of Protobuf as a strict data format like xml or JSON + linting, except Protobuf is a compact binary message with strongly typed fields
-- gRPC is similar to REST + OpenAPI, except gRPC is an [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) framework that supports bi-directional streaming
-- STAC is a  searchable catalog  of metadata for geospatial datasets or assets.
-
-[Next](./search.md) **Search >>>**
+[Next: **Search >>>**](./search.md) 

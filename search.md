@@ -359,6 +359,6 @@ The query returns results between `2019-08-06T00:00:00-06:00` and `2019-08-06T23
     STAC item date, 2019-08-06T20:42:51+00:00, is after 2019-08-06T00:00:00-06:00: True
 ```
 
-[Previous](./README.md) **<<< Getting Started**   
+[Previous: **<<< Getting Started**](./README.md)    
 
-[Next](./download.md) **Download >>>**
+[Next: **Download >>>**](./download.md) 
