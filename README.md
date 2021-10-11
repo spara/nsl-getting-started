@@ -123,16 +123,4 @@ show(img)
 
 ![Austin,TX](./img/austin.png)
 
-## Concepts: Protobufs, gRPC, and Spatio Temporal Asset Catalogs (STAC)
-
-The `nsl.stac` library connects to NearSpace Labs' Spatio Temporal Asset Catalog (STAC) which holds metadata about imagery. It uses the gPRC, a modern framwork for requesting services from the STAC server. The requests are formatted as a protocol buffer which is a binary structured format for serializing data.
-
-Details about each are listed below:
-
-**Definition of [STAC](https://stacspec.org/)**:
-> The SpatioTemporal Asset Catalog (STAC) specification provides a common language to describe a range of geospatial information, so it can more easily be indexed and discovered.  A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain space and time.
-
-**Definition of [gRPC](https://grpc.io)**:
-> gRPC is a modern open source high performance RPC framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking and authentication. It is also applicable in last mile of distributed computing to connect devices, mobile applications and browsers to backend services.
-
 [Next: **Search >>>**](./search.md) 
